@@ -8,24 +8,30 @@ public class ListNode
     }
 }
 
-public class Solution 
+public class Solution
 {
-    public ListNode RemoveNthFromEnd(ListNode head, int n) 
+    public ListNode RemoveNthFromEnd(ListNode head, int n)
     {
+        if (head.next == null)
+        {
+            return null;
+        }
         ListNode res = head;
-        int length = 0;
-        while(head != null)
+        ListNode front = head;
+        for (int i = 0; i < n; i++)
+        {
+            front = front.next;
+        }
+        if(front == null)
         {
             head = head.next;
-            length += 1;
+            return head;
         }
-        head = res;
-        for(int i = 0; i < length - n; i ++)
+        while (front.next != null)
         {
             head = head.next;
+            front = front.next;
         }
-        
-        head.val = head.next.val;
         head.next = head.next.next;
         return res;
     }
