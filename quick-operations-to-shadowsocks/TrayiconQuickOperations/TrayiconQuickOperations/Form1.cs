@@ -12,6 +12,8 @@ namespace TrayiconQuickOperations
 {
     public partial class Form1 : Form
     {
+        PopWindow pop = new PopWindow();
+
         public Form1()
         {
             InitializeComponent();
@@ -19,7 +21,13 @@ namespace TrayiconQuickOperations
 
         private void notifyIcon1_MouseDoubleClick(object sender, MouseEventArgs e)
         {
+            pop.Activate();
+        }
+
+        private void notifyIcon1_MouseClick(object sender, MouseEventArgs e)
+        {
 
         }
+
     }
 }
