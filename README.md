@@ -1,3 +1,3 @@
 # learn-to-code
 
-Learning frameworks, algorithms, and so on.
+Learning languages, frameworks and algorithms.
