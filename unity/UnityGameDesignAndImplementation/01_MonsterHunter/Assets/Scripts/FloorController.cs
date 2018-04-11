@@ -5,23 +5,26 @@ using UnityEngine;
 public class FloorController : MonoBehaviour
 {
     public GameObject floorPrefab;
-    public Vector3 floorMoveSpeed;
+    public static Vector3 floorMoveSpeed;
+    public float gap;
+    public Vector3 floorStartSpeed;
 
     private void Awake()
     {
-        //Instantiate(floorPrefab);
+        floorMoveSpeed = floorStartSpeed;
     }
 
     // Use this for initialization
     void Start()
     {
         StartCoroutine(GenerateFloors());
+        StartCoroutine(SpeedUp());
     }
 
     // Update is called once per frame
     void Update()
     {
-        floorMoveSpeed += new Vector3(-0.01f, 0, 0);
+
     }
 
     IEnumerator GenerateFloors()
@@ -29,8 +32,15 @@ public class FloorController : MonoBehaviour
         while (true)
         {
             GameObject gm = Instantiate(floorPrefab);
-            Rigidbody rd = gm.GetComponent<Rigidbody>();
-            rd.velocity = floorMoveSpeed;
+            yield return new WaitForSeconds(gap / (-floorMoveSpeed.x));
+        }
+    }
+
+    IEnumerator SpeedUp()
+    {
+        while (true)
+        {
+            floorMoveSpeed += new Vector3(-0.1f, 0, 0);
             yield return new WaitForSeconds(1);
         }
     }

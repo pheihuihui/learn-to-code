@@ -226,7 +226,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   floorPrefab: {fileID: 1959412922988374, guid: 30c99470ae797ab4d9e701545da70428,
     type: 2}
-  floorMoveSpeed: {x: -0.01, y: 0, z: 0}
+  gap: 3
+  floorStartSpeed: {x: -0.5, y: 0, z: 0}
 --- !u!4 &301051119
 Transform:
   m_ObjectHideFlags: 0
