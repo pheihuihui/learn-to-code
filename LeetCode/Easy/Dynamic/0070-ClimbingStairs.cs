@@ -17,19 +17,20 @@ public class Solution
         {
             return 1;
         }
+        else if(up == 1)
+        {
+            return down;
+        }
         else
         {
-            int a = down;
-            int b = up;
-            int c = up;
-            for (int i = 0; i < up - 1; i++)
+            double res = 1;
+            for(int i = up; i >= 1; i--)
             {
-                a *= down - 1;
-                down -= 1;
-                b *= c - 1;
-                c -= 1;
+                res *= ((double)down / (double)up);
+                up--;
+                down--;
             }
-            return a / b;
+            return (int)(res + 0.01f);
         }
     }
 }
