@@ -1,23 +1,22 @@
 public class Solution
 {
-    int[] x;
-    int[] s;
+    int[] x, s;
+    Random rd = new Random();
     public Solution(int[] nums)
     {
-        x = nums.ToList().ToArray();
-        s = nums.ToList().ToArray();
+        x = new int[nums.Length];
+        s = new int[nums.Length];
+        Array.Copy(nums, x, nums.Length);
+        Array.Copy(nums, s, nums.Length);
     }
-    
     public int[] Reset()
     {
         return x;
     }
-    
     public int[] Shuffle()
     {
         int len = s.Length;
-        Random rd = new Random();
-        for(int i = 0; i < len; i++)
+        for (int i = 0; i < len; i++)
         {
             int xx = rd.Next(len);
             int tmp = s[i];
