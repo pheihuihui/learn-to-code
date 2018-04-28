@@ -1,3 +1,3 @@
-# Changelog for fuck
+# Changelog for hello
 
 ## Unreleased changes
