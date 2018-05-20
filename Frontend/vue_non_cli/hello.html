@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>My first Vue app</title>
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+<body>
+  <div id="app">
+    {{ message }}
+  </div>
+  <div id="app2">
+      <span v-bind:title="message">
+          mouse here
+      </span>
+  </div>
+  <div id="app3">
+      <p v-if="seen">now you see me</p>
+  </div>
+
+  <div id="app4">
+      <ol>
+          <li v-for="todo in todos">
+              {{ todo.text }}
+          </li>
+      </ol>
+  </div>
+
+  <script>
+    var app = new Vue({
+      el: '#app',
+      data: {
+        message: 'Hello Vue!'
+      }
+    })
+
+    var app2 = new Vue({
+        el: '#app2',
+        data: {
+            message: 'page loaded ' + new Date().toLocaleString()
+        }
+    })
+
+    var app3 = new Vue({
+        el: '#app3',
+        data: {
+            seen: true
+        }
+    })
+
+    var app4 = new Vue({
+        el: '#app4',
+        data: {
+            todos: [
+                {text: 'learn javascript'},
+                {text: 'learn vue'},
+                {text: 'learn project'}
+            ]
+        }
+    })
+  </script>
+</body>
+</html>
