@@ -5,22 +5,16 @@ using System.Threading.Tasks;
 
 namespace mvcapp.Models
 {
-    public enum State : int
-    {
-        Gray = 0,
-        Green = 1
-    }
-
-    public static class NodeModel
+    public static class CellsModel
     {
         public static int HorizonNumber { get; set; }
         public static int VerticalNumber { get; set; }
-        public static State[,] Face { get; set; }
-        static NodeModel()
+        public static bool[,] Face { get; set; }
+        static CellsModel()
         {
             HorizonNumber = 16;
             VerticalNumber = 9;
-            Face = new State[HorizonNumber, VerticalNumber];
+            Face = new bool[HorizonNumber, VerticalNumber];
         }
 
         public static void InitGame()
@@ -30,13 +24,13 @@ namespace mvcapp.Models
             {
                 for(int j = 0; j < VerticalNumber; j++)
                 {
-                    if(rd.Next(1) == 0)
+                    if (rd.Next(2) == 0)
                     {
-                        Face[i, j] = State.Gray;
+                        Face[i, j] = false;
                     }
                     else
                     {
-                        Face[i, j] = State.Green;
+                        Face[i, j] = true;
                     }
                 }
             }
@@ -46,15 +40,7 @@ namespace mvcapp.Models
         {
             if(i < HorizonNumber && j < VerticalNumber)
             {
-                State state = Face[i, j];
-                if(state == State.Gray)
-                {
-                    Face[i, j] = State.Green;
-                }
-                else
-                {
-                    Face[i, j] = State.Gray;
-                }
+                Face[i, j] = !Face[i, j];
             }
             else
             {

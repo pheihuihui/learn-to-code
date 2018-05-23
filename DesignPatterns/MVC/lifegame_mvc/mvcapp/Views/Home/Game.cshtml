@@ -1,0 +1,38 @@
+﻿
+@{
+    ViewData["Title"] = "Game";
+}
+
+<h2>Conway's Game of Life</h2>
+
+<div>
+    <input id="horizon_num" value="@CellsModel.HorizonNumber" />
+    <input id="vertical_num" value="@CellsModel.VerticalNumber" />
+    <button id="run_game" onclick="">run</button>
+    <br />
+    <br />
+    <br />
+    <br />
+    <table border="1">
+        @{ 
+            for(int i = 0; i < CellsModel.VerticalNumber; i++)
+            {
+                <tr>
+                    @{ 
+                        for(int j = 0; j < CellsModel.HorizonNumber; j++)
+                        {
+                            if(CellsModel.Face[j, i])
+                            {
+                                <th style="color:aqua">true</th>
+                            }
+                            else
+                            {
+                                <th style="color:gray">false</th>
+                            }
+                        }
+                    }
+                </tr>
+            }
+        }
+    </table>
+</div>
