@@ -3,11 +3,38 @@
 <head>
   <title>My first Vue app</title>
   <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  <script src="./jshello.js"></script>
+  <style type="text/css">
+    .main{width:100px;}
+    b.rounder{display:block;background: #FFF}
+    b.rounder b{display:block;height:1px;overflow: hidden; background: #99cc33;}
+    b.r1{margin: 0 1px}
+    b.r2{margin: 0 2px}
+    .content{height:22px;text-align:center; padding-top:10px; }
+  </style>
 </head>
 <body>
+
+<!-- <div id="ss">
+    <form onsubmit="return validate(this)" method="post">
+        Email: 
+        <input type="text" name="email" size="30"/>
+        <input type="submit" value="Submit" onclick="myalert()"/> 
+    </form>
+</div> -->
+
+
+<div class="main">
+        <b class="rounder"><b class="r2"></b><b class="r1"></b></b>
+        <div class="content"></div>
+        <b class="rounder"><b class="r1"></b><b class="r2"></b></b>
+</div>
+
+
   <div id="app">
     {{ message }}
   </div>
+
   <div id="app2">
       <span v-bind:title="message">
           mouse here
