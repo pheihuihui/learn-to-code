@@ -14,14 +14,14 @@
     <br />
     <br />
     <table border="1">
-        @{ 
-            for(int i = 0; i < CellsModel.VerticalNumber; i++)
+        @{
+            for (int i = 0; i < CellsModel.VerticalNumber; i++)
             {
                 <tr>
-                    @{ 
-                        for(int j = 0; j < CellsModel.HorizonNumber; j++)
+                    @{
+                        for (int j = 0; j < CellsModel.HorizonNumber; j++)
                         {
-                            if(CellsModel.Face[j, i])
+                            if (CellsModel.Face[j, i])
                             {
                                 <th style="color:aqua">true</th>
                             }
@@ -36,3 +36,31 @@
         }
     </table>
 </div>
+<br />
+<br />
+<br />
+<br />
+
+
+@{
+    for (int i = 0; i < CellsModel.VerticalNumber; i++)
+    {
+        <div>
+            @{
+                for (int j = 0; j < CellsModel.HorizonNumber; j++)
+                {
+                    if (CellsModel.Face[j, i])
+                    {
+                        string stringid = "id" + (i * 10 + j).ToString();
+                        <div id=@stringid class="greencell" />
+                    }
+                    else
+                    {
+                        string stringid = "id" + (i * 10 + j).ToString();
+                        <div id=@stringid class="graycell" />
+                    }
+                }
+            }
+        </div>
+    }
+}

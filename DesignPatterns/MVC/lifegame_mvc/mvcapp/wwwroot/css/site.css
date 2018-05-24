@@ -21,6 +21,24 @@
     width: 100%;
 }
 
+
+.greencell {
+    width: 50px;
+    height: 50px;
+    background-color: green;
+    border-radius: 25px;
+    display: inline-block;
+}
+
+.graycell {
+    width: 50px;
+    height: 50px;
+    background-color: gray;
+    border-radius: 25px;
+    display: inline-block;
+}
+
+
 /* QR code generator */
 #qrCode {
     margin: 15px;
