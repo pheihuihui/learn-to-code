@@ -13,7 +13,7 @@
     <br />
     <br />
     <br />
-    <table border="1">
+    <table class="table-striped">
         @{
             for (int i = 0; i < CellsModel.VerticalNumber; i++)
             {
@@ -23,11 +23,15 @@
                         {
                             if (CellsModel.Face[j, i])
                             {
-                                <th style="color:aqua">true</th>
+                                <td height="45px" width="80px" style="color:aqua">
+                                    <div class="greencell" />
+                                </td>
                             }
                             else
                             {
-                                <th style="color:gray">false</th>
+                                <td height="45px" width="80px" style="color:gray">
+                                    <div class="graycell" />
+                                </td>
                             }
                         }
                     }
@@ -40,27 +44,3 @@
 <br />
 <br />
 <br />
-
-
-@{
-    for (int i = 0; i < CellsModel.VerticalNumber; i++)
-    {
-        <div>
-            @{
-                for (int j = 0; j < CellsModel.HorizonNumber; j++)
-                {
-                    if (CellsModel.Face[j, i])
-                    {
-                        string stringid = "id" + (i * 10 + j).ToString();
-                        <div id=@stringid class="greencell" />
-                    }
-                    else
-                    {
-                        string stringid = "id" + (i * 10 + j).ToString();
-                        <div id=@stringid class="graycell" />
-                    }
-                }
-            }
-        </div>
-    }
-}

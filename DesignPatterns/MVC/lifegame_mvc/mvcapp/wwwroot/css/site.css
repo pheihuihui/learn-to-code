@@ -27,7 +27,7 @@
     height: 50px;
     background-color: green;
     border-radius: 25px;
-    display: inline-block;
+    display: inline-grid;
 }
 
 .graycell {
@@ -35,7 +35,7 @@
     height: 50px;
     background-color: gray;
     border-radius: 25px;
-    display: inline-block;
+    display: inline-grid;
 }
 
 
