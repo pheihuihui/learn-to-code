@@ -3,13 +3,20 @@
     ViewData["Title"] = "Game";
 }
 
+
 <h2>Conway's Game of Life</h2>
+
 
 <div>
     <input id="horizon_num" value="@CellsModel.HorizonNumber" />
     <input id="vertical_num" value="@CellsModel.VerticalNumber" />
     <button id="run_game" onclick="">run</button>
     <br />
+    <br />
+    <br />
+    <br />
+
+    <button id="refreshbutton">Refresh</button>
     <br />
     <br />
     <br />
@@ -21,16 +28,17 @@
                     @{
                         for (int j = 0; j < CellsModel.HorizonNumber; j++)
                         {
+                            string id = "id" + i.ToString() + j.ToString();
                             if (CellsModel.Face[j, i])
                             {
                                 <td height="45px" width="80px" style="color:aqua">
-                                    <div class="greencell" />
+                                    <div id="@id" class="greencell" />
                                 </td>
                             }
                             else
                             {
                                 <td height="45px" width="80px" style="color:gray">
-                                    <div class="graycell" />
+                                    <div id="@id" class="graycell" />
                                 </td>
                             }
                         }

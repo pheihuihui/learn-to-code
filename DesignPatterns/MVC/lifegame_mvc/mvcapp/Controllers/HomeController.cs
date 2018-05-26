@@ -41,5 +41,10 @@ namespace mvcapp.Controllers
             ViewData["Message"] = "Conway's Game of Life";
             return View();
         }
+
+        public JsonResult CellsData()
+        {
+            return Json(CellsModel.Face[0, 0]);
+        }
     }
 }
