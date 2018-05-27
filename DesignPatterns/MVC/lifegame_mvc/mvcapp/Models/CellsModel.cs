@@ -24,14 +24,7 @@ namespace mvcapp.Models
             {
                 for(int j = 0; j < VerticalNumber; j++)
                 {
-                    if (rd.Next(2) == 0)
-                    {
-                        Face[i, j] = false;
-                    }
-                    else
-                    {
-                        Face[i, j] = true;
-                    }
+                    Face[i, j] = (rd.Next(2) == 0 ? false : true);
                 }
             }
         }

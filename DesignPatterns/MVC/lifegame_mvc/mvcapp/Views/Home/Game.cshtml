@@ -16,7 +16,7 @@
     <br />
     <br />
 
-    <button id="refreshbutton">Refresh</button>
+    @*<button id="refreshbutton">Refresh</button>*@
     <br />
     <br />
     <br />
@@ -31,14 +31,14 @@
                             string id = "id" + i.ToString() + j.ToString();
                             if (CellsModel.Face[j, i])
                             {
-                                <td height="45px" width="80px" style="color:aqua">
-                                    <div id="@id" class="greencell" />
+                                <td height="45px" width="80px" >
+                                    <div id="@id" class="cell" style="background-color: green"   />
                                 </td>
                             }
                             else
                             {
-                                <td height="45px" width="80px" style="color:gray">
-                                    <div id="@id" class="graycell" />
+                                <td height="45px" width="80px" >
+                                    <div id="@id" class="cell" style="background-color: gray" />
                                 </td>
                             }
                         }

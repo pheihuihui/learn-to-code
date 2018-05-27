@@ -1,12 +1,26 @@
-﻿$("#refreshbutton").click(function () {
-    $.get("http://localhost:12650/Home/CellsData", function (res) {
+﻿import { setInterval } from "timers";
+
+homeurl = "http://localhost:12650"
+
+$("#refreshbutton").click(function () {
+    $.get( homeurl + "/Home/CellsData", function (res) {
         if (res) {
-            $("div#id00").style = "greencell";
-            //$("div#id00").hide();
+            var div00 = document.getElementById("id00")
+            div00.className = "greencell";
         } else {
-            $("div#id00").style = "graycell";
-            //$("div#id00").show();
+            var div00 = document.getElementById("id00")
+            div00.className = "graycell";
         }
         console.log(res);
     });
 });
+
+$(document).ready(function () {
+
+})
+
+function asyncCells() {
+    $.get(homeurl + "/Home/CellsData", function (res) {
+        
+    })
+}

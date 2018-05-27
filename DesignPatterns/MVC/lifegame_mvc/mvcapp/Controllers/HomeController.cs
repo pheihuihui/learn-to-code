@@ -18,14 +18,12 @@ namespace mvcapp.Controllers
         public IActionResult About()
         {
             ViewData["Message"] = "Your application description page.";
-
             return View();
         }
 
         public IActionResult Contact()
         {
             ViewData["Message"] = "Your contact page.";
-
             return View();
         }
 
@@ -44,7 +42,13 @@ namespace mvcapp.Controllers
 
         public JsonResult CellsData()
         {
-            return Json(CellsModel.Face[0, 0]);
+            return Json(CellsModel.Face);
         }
+        
+        public JsonResult CellsNumber()
+        {
+            return Json(new int[] { CellsModel.HorizonNumber, CellsModel.VerticalNumber });
+        }
+
     }
 }
