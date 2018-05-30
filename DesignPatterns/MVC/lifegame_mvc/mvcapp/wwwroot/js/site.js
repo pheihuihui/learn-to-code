@@ -21,7 +21,7 @@ $("#refreshbutton").click(function () {
 });
 
 $(document).ready(function () {
-    setInterval(asyncCells, 100)
+    setInterval(asyncCells, 50)
 })
 
 function asyncCells() {
@@ -30,17 +30,18 @@ function asyncCells() {
             for (var i = 0; i < cells[0]; i++) {
                 for (var j = 0; j < cells[1]; j++) {
                     $("input#vertical_num").value = (i * j).toString()
-                    var divid = "id" + i.toString() + j.toString()
+                    var divid = "id_" + j.toString() + "_" + i.toString()
                     if (res[i][j] == true) {
                         var ddiv = document.getElementById(divid);
                         if (ddiv != null) {
-                            ddiv.className = "greencell"
+                            //ddiv.className = "greencell"
+                            ddiv.innerHTML = "<div class=\"cell\" style=\"background-color: green \" />"
                         }
-                        
                     } else {
                         var ddiv = document.getElementById(divid);
                         if (ddiv != null) {
-                            ddiv.className = "graycell"
+                            //ddiv.className = "graycell"
+                            ddiv.innerHTML = "<div class=\"cell\" style=\"background-color: gray \" />"
                         }
                     }
                 }

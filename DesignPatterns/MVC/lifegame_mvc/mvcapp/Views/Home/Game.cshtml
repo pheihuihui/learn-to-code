@@ -10,7 +10,7 @@
 <div>
     <input id="horizon_num" value="@CellsModel.HorizonNumber" />
     <input id="vertical_num" value="@CellsModel.VerticalNumber" />
-    <button id="run_game" onclick="">run</button>
+    <button id="run_game">run</button>
     <br />
     <br />
     <br />
@@ -28,17 +28,21 @@
                     @{
                         for (int j = 0; j < CellsModel.HorizonNumber; j++)
                         {
-                            string id = "id" + i.ToString() + j.ToString();
+                            string id = "id" + "_" + i.ToString() + "_" + j.ToString();
                             if (CellsModel.Face[j, i])
                             {
                                 <td height="45px" width="80px" >
-                                    <div id="@id" class="cell" style="background-color: green"   />
+                                    <div id="@id">
+                                        <div class="cell" style="background-color: green" />
+                                    </div>
                                 </td>
                             }
                             else
                             {
-                                <td height="45px" width="80px" >
-                                    <div id="@id" class="cell" style="background-color: gray" />
+                                <td height="45px" width="80px">
+                                    <div id="@id">
+                                        <div class="cell" style="background-color: gray" />
+                                    </div>
                                 </td>
                             }
                         }
