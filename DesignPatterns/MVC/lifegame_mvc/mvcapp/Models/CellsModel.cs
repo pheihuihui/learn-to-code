@@ -9,7 +9,9 @@ namespace mvcapp.Models
     {
         public static int HorizonNumber { get; set; }
         public static int VerticalNumber { get; set; }
+        public static int LimitNumber { get; set; } = 4;
         public static bool[,] Face { get; set; }
+
         static CellsModel()
         {
             HorizonNumber = 16;
@@ -38,6 +40,40 @@ namespace mvcapp.Models
             else
             {
                 throw new IndexOutOfRangeException("Out of range");
+            }
+        }
+
+        public static int GetAliveCellsNumber(int i, int j)
+        {
+            int res = 0;
+            if (IsCellExit(i - 1, j - 1))
+                res += (Face[i - 1, j - 1] ? 1 : 0);
+            if (IsCellExit(i - 1, j))
+                res += (Face[i - 1, j] ? 1 : 0);
+            if (IsCellExit(i - 1, j + 1))
+                res += (Face[i - 1, j + 1] ? 1 : 0);
+            if (IsCellExit(i, j - 1))
+                res += (Face[i, j - 1] ? 1 : 0);
+            if (IsCellExit(i, j + 1))
+                res += (Face[i, j + 1] ? 1 : 0);
+            if (IsCellExit(i + 1, j - 1))
+                res += (Face[i + 1, j - 1] ? 1 : 0);
+            if (IsCellExit(i + 1, j))
+                res += (Face[i + 1, j] ? 1 : 0);
+            if (IsCellExit(i + 1, j + 1))
+                res += (Face[i + 1, j + 1] ? 1 : 0);
+            return res;
+        }
+
+        private static bool IsCellExit(int i, int j)
+        {
+            if(i < 0 || i >= HorizonNumber || j < 0 || j >= VerticalNumber )
+            {
+                return false;
+            }
+            else
+            {
+                return true;
             }
         }
     }

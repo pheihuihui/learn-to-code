@@ -27,8 +27,9 @@ namespace mvcapp.Controllers
             Random rd = new Random();
             while (true)
             {
-                state = !state;
-                Thread.Sleep(rd.Next(500, 2000));
+                if(rd.Next(2) == 1)
+                    state = !state;
+                Thread.Sleep(100);
                 Debug.WriteLine(CellsModel.Face[0, 0].ToString() + "  " + Thread.CurrentThread.ManagedThreadId);
             }
         }
@@ -47,6 +48,7 @@ namespace mvcapp.Controllers
                 }
             }
         }
+
 
     }
 }
