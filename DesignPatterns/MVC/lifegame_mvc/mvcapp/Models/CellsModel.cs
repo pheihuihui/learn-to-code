@@ -14,8 +14,8 @@ namespace mvcapp.Models
 
         static CellsModel()
         {
-            HorizonNumber = 16;
-            VerticalNumber = 9;
+            HorizonNumber = 16 * 4;
+            VerticalNumber = 9 * 4;
             Face = new bool[HorizonNumber, VerticalNumber];
         }
 

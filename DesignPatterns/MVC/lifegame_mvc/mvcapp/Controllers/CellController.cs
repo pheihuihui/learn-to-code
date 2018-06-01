@@ -11,18 +11,27 @@ namespace mvcapp.Controllers
 {
     public class CellController : Controller
     {
+        private bool[,] TempCells;
         public CellController()
         {
-
+            TempCells = CellsModel.Face;
         }
 
         public void RunGame()
         {
             CellsModel.InitGame();
-            ChangeAllCells();
+            Thread th = new Thread(() => 
+            {
+                while (true)
+                {
+                    ChangeAllCells(true);
+                    Thread.Sleep(100);
+                }
+            });
+            th.Start();
         }
 
-        public void ChangeCell(ref bool state)
+        private void ChangeCell(ref bool state)
         {
             Random rd = new Random();
             while (true)
@@ -34,7 +43,35 @@ namespace mvcapp.Controllers
             }
         }
 
-        public void ChangeAllCells()
+        public void ChangeAllCells(bool condition)
+        {
+            if (condition)
+            {
+                for (int i = 0; i < CellsModel.HorizonNumber; i++)
+                {
+                    for (int j = 0; j < CellsModel.VerticalNumber; j++)
+                    {
+                        int ii = i;
+                        int jj = j;
+                        if (CellsModel.GetAliveCellsNumber(ii, jj) == 3)
+                        {
+                            TempCells[ii, jj] = true;
+                        }
+                        else if (CellsModel.GetAliveCellsNumber(ii, jj) == 2)
+                        {
+
+                        }
+                        else
+                        {
+                            TempCells[ii, jj] = false;
+                        }
+                    }
+                }
+                CellsModel.Face = TempCells;
+            }
+        }
+
+        private void ChangeAllCells()
         {
             for (int i = 0; i < CellsModel.HorizonNumber; i++)
             {
@@ -48,7 +85,6 @@ namespace mvcapp.Controllers
                 }
             }
         }
-
 
     }
 }

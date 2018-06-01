@@ -22,26 +22,26 @@
 }
 
 .greencell {
-    width: 50px;
-    height: 50px;
+    width: 16px;
+    height: 16px;
     background-color: green;
-    border-radius: 25px;
+    border-radius: 8px;
     display: inline-grid;
 }
 
 .graycell {
-    width: 50px;
-    height: 50px;
+    width: 16px;
+    height: 16px;
     background-color: gray;
-    border-radius: 25px;
+    border-radius: 8px;
     display: inline-grid;
 }
 
 .cell {
-    width: 50px;
-    height: 50px;
+    width: 16px;
+    height: 16px;
     background-color: white;
-    border-radius: 25px;
+    border-radius: 8px;
     display: inline-grid;
 }
 
