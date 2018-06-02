@@ -35,13 +35,13 @@ function asyncCells() {
                         var ddiv = document.getElementById(divid);
                         if (ddiv != null) {
                             //ddiv.className = "greencell"
-                            ddiv.innerHTML = "<div class=\"cell\" style=\"background-color: aqua \" />"
+                            ddiv.innerHTML = "<div class=\"cell\" style=\"background-color: darkgreen \" />"
                         }
                     } else {
                         var ddiv = document.getElementById(divid);
                         if (ddiv != null) {
                             //ddiv.className = "graycell"
-                            ddiv.innerHTML = "<div class=\"cell\" style=\"background-color: ivory \" />"
+                            ddiv.innerHTML = "<div class=\"cell\" style=\"background-color: darkgray \" />"
                         }
                     }
                 }
