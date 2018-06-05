@@ -24,7 +24,7 @@ struct PixelShaderInput
 PixelShaderInput main(VertexShaderInput input)
 {
 	PixelShaderInput output;
-	float4 pos = float4(input.pos, 1.0f);
+	float4 pos = float4(input.pos, 2.0f);
 
 	// 将顶点位置转换为投影空间。
 	pos = mul(pos, model);

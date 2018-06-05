@@ -80,6 +80,12 @@
     <None Include="dx12_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="VertexShader.hlsl" />
+    <ShaderGraphContentTask Include="Shader.dgsl" />
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="Shader.hlsl" />
+    <FxCompile Include="TestPixelShader.hlsl">
+      <Filter>内容</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

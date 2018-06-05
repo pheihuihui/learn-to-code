@@ -4,11 +4,9 @@
 #include "ShaderStructures.h"
 #include "..\Common\StepTimer.h"
 
-namespace dx12
-{
+namespace dx12 {
 	// 此示例呈现器实例化一个基本渲染管道。
-	class Sample3DSceneRenderer
-	{
+	class Sample3DSceneRenderer {
 	public:
 		Sample3DSceneRenderer(const std::shared_ptr<DX::DeviceResources>& deviceResources);
 		~Sample3DSceneRenderer();
