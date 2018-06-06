@@ -3,18 +3,20 @@
     ViewData["Title"] = "Game";
 }
 
-
+<br />
 <h2>Conway's Game of Life</h2>
 
 
 <div>
-    <input id="horizon_num" placeholder="input x value here" />
-    <input id="vertical_num" placeholder="input y value here" />
-    <button id="run_game">run</button>
     <br />
     <br />
+    <input class="input-lg" id="horizon_num" placeholder="input x value here" />
+    <input class="input-lg" id="vertical_num" placeholder="input y value here" />
+    <button id="run_game" class="btn-lg" style="background-color: cadetblue" type="button">run</button>
     <br />
     <br />
+    <button id="start" class="btn-lg" style="background-color: aqua" type="button">Start</button>
+    <button id="pulse" class="btn-lg" style="background-color: aquamarine" type="button">Pulse</button>
 
     @*<button id="refreshbutton">Refresh</button>*@
     <br />
@@ -31,7 +33,7 @@
                             string id = "id" + "_" + i.ToString() + "_" + j.ToString();
                             if (CellsModel.Face[j, i])
                             {
-                                <td height="20px" width="20px" >
+                                <td height="100px" width="100px">
                                     <div id="@id">
                                         <div class="cell" style="background-color: darkgreen" />
                                     </div>
@@ -39,7 +41,7 @@
                             }
                             else
                             {
-                                <td height="20px" width="20px">
+                                <td height="100px" width="100px">
                                     <div id="@id">
                                         <div class="cell" style="background-color: darkgray" />
                                     </div>

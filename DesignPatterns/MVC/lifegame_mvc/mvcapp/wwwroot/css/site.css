@@ -38,12 +38,42 @@
 }
 
 .cell {
-    width: 16px;
-    height: 16px;
+    width: 80px;
+    height: 80px;
     background-color: white;
-    border-radius: 0px;
+    border-radius: 20px;
     display: inline-grid;
 }
+
+.btn:focus,
+.btn:active:focus,
+.btn.active:focus,
+.btn.focus,
+.btn:active.focus,
+.btn.active.focus {
+    outline: none;
+}
+
+.input-lg:focus,
+.input-lg:active:focus,
+.input-lg.active:focus,
+.input-lg.focus,
+.input-lg:active.focus,
+.input-lg.active.focus {
+    outline: none;
+}
+
+.btn-lg:focus,
+.btn-lg:active:focus,
+.btn-lg.active:focus,
+.btn-lg.focus,
+.btn-lg:active.focus,
+.btn-lg.active.focus {
+    outline: none;
+}
+
+/*Note_201806062325: hide button ouline.*/
+
 
 /* QR code generator */
 #qrCode {
