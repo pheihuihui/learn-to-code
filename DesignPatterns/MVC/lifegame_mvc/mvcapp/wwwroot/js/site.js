@@ -6,22 +6,12 @@
 
 
 homeurl = "http://localhost:12650"
+var grayCellInnerHtml = "<div class=\"cell\" style=\"background-color: darkgray \" />"
+var greenCellInnerHtml = "<div class=\"cell\" style=\"background-color: darkgreen \" />"
 
-$("#refreshbutton").click(function () {
-    $.get(homeurl + "/Home/CellsData", function (res) {
-        if (res) {
-            var div00 = document.getElementById("id00")
-            div00.className = "greencell";
-        } else {
-            var div00 = document.getElementById("id00")
-            div00.className = "graycell";
-        }
-        console.log(res);
-    });
-});
 
 $(document).ready(function () {
-    setInterval(asyncCells, 50)
+    setInterval(asyncCells, 1000)
 })
 
 function asyncCells() {
@@ -34,14 +24,12 @@ function asyncCells() {
                     if (res[i][j] == true) {
                         var ddiv = document.getElementById(divid);
                         if (ddiv != null) {
-                            //ddiv.className = "greencell"
-                            ddiv.innerHTML = "<div class=\"cell\" style=\"background-color: darkgreen \" />"
+                            ddiv.innerHTML = greenCellInnerHtml
                         }
                     } else {
                         var ddiv = document.getElementById(divid);
                         if (ddiv != null) {
-                            //ddiv.className = "graycell"
-                            ddiv.innerHTML = "<div class=\"cell\" style=\"background-color: darkgray \" />"
+                            ddiv.innerHTML = grayCellInnerHtml
                         }
                     }
                 }
@@ -49,3 +37,18 @@ function asyncCells() {
         })
     })
 }
+
+function resetGame() {
+
+}
+
+
+$(".cont").click(function () {
+    var ele = this.getElementsByClassName("incont")[0]
+    if (ele.innerHTML.indexOf("gray") >= 0 && ele.innerHTML.indexOf("green") == -1) {
+        ele.innerHTML = greenCellInnerHtml
+    }
+    else if (ele.innerHTML.indexOf("green") >= 0 && ele.innerHTML.indexOf("gray") == -1) {
+        ele.innerHTML = grayCellInnerHtml
+    }
+})

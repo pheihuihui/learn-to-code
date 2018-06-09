@@ -12,13 +12,11 @@
     <br />
     <input class="input-lg" id="horizon_num" placeholder="input x value here" />
     <input class="input-lg" id="vertical_num" placeholder="input y value here" />
-    <button id="run_game" class="btn-lg" style="background-color: cadetblue" type="button">run</button>
+    <button id="run_game" class="btn-lg" onclick="resetGame()" style="background-color: cadetblue" type="button">run</button>
     <br />
     <br />
     <button id="start" class="btn-lg" style="background-color: aqua" type="button">Start</button>
     <button id="pulse" class="btn-lg" style="background-color: aquamarine" type="button">Pulse</button>
-
-    @*<button id="refreshbutton">Refresh</button>*@
     <br />
     <br />
     <br />
@@ -33,16 +31,16 @@
                             string id = "id" + "_" + i.ToString() + "_" + j.ToString();
                             if (CellsModel.Face[j, i])
                             {
-                                <td height="100px" width="100px">
-                                    <div id="@id">
+                                <td height="80px" width="80px" class="cont">
+                                    <div id="@id" class="incont">
                                         <div class="cell" style="background-color: darkgreen" />
                                     </div>
                                 </td>
                             }
                             else
                             {
-                                <td height="100px" width="100px">
-                                    <div id="@id">
+                                <td height="80px" width="80px" class="cont">
+                                    <div id="@id" class="incont">
                                         <div class="cell" style="background-color: darkgray" />
                                     </div>
                                 </td>
