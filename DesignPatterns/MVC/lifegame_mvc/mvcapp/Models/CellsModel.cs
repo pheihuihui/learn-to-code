@@ -10,6 +10,7 @@ namespace mvcapp.Models
         public static int HorizonNumber { get; set; }
         public static int VerticalNumber { get; set; }
         public static int LimitNumber { get; set; } = 4;
+        public static bool IsRunning { get; set; } = false;
         public static bool[,] Face { get; set; }
 
         static CellsModel()
@@ -22,6 +23,7 @@ namespace mvcapp.Models
         public static void InitGame()
         {
             Random rd = new Random();
+            IsRunning = true;
             for (int i = 0; i < HorizonNumber; i++)
             {
                 for(int j = 0; j < VerticalNumber; j++)

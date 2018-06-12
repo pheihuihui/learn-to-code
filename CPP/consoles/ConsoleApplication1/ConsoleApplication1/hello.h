@@ -1,5 +1,7 @@
 #pragma once
 
+extern int global_val;
+
 class MyClass {
 public:
 	MyClass(int i);

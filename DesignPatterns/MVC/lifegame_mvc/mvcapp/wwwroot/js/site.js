@@ -52,3 +52,11 @@ $(".cont").click(function () {
         ele.innerHTML = grayCellInnerHtml
     }
 })
+
+function sendPulse() {
+
+}
+
+function sendStart() {
+
+}

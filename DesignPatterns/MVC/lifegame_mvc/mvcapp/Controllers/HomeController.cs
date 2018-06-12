@@ -33,6 +33,28 @@ namespace mvcapp.Controllers
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
 
+        public IActionResult CommitXY()
+        {
+            int ii = 0;
+            int jj = 0;
+            try
+            {
+                ii = Convert.ToInt32(Request.Form["input_X"]);
+                jj = Convert.ToInt32(Request.Form["input_Y"]);
+            }
+            catch
+            {
+                ii = 0;
+                jj = 0;
+            }
+            if(ii != 0 && jj != 0)
+            {
+                CellsModel.HorizonNumber = (ii > 32 ? 32 : ii);
+                CellsModel.VerticalNumber = (jj > 48 ? 48 : jj);
+            }
+            return new RedirectResult("Game");
+        }
+
         public IActionResult Game()
         {
             CellController cellcon = new CellController();
