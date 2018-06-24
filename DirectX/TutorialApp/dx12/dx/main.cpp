@@ -34,14 +34,14 @@ int APIENTRY wWinMain(HINSTANCE hInstance, HINSTANCE, LPWSTR lpCmdLine, int nCmd
 			RECT windowrect;
 			windowrect.left = 0;
 			windowrect.top = 0;
-			windowrect.right = 800;
-			windowrect.bottom = 600;
-			AdjustWindowRect(&windowrect, WS_POPUP | WS_VISIBLE, FALSE);
+			windowrect.right = 1600;
+			windowrect.bottom = 900;
+			AdjustWindowRect(&windowrect, WS_POPUP | WS_VISIBLE | WS_CAPTION | WS_OVERLAPPEDWINDOW, FALSE);
 
 			HWND hWnd = CreateWindowExW(0,
 				L"{640CB8AD-56CD-4328-B4D0-2A9DAA951494}",
 				L"<<Direct3D 12 programming>>",
-				WS_POPUP | WS_VISIBLE,
+				WS_POPUP | WS_CAPTION | WS_VISIBLE | WS_OVERLAPPEDWINDOW, //show max min close button
 				GetSystemMetrics(SM_CXSCREEN) / 2 - windowrect.right / 2,
 				GetSystemMetrics(SM_CYSCREEN) / 2 - windowrect.bottom / 2,
 				windowrect.right,

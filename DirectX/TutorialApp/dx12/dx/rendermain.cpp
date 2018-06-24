@@ -69,6 +69,54 @@ DWORD WINAPI RenderThreadMain(LPVOID lpThreadParameter) {
 	}
 	pDXGIFactory->Release();
 
+
+	ID3D12DescriptorHeap *pRTVHeap;
+	{
+		D3D12_DESCRIPTOR_HEAP_DESC RTVHeapDesc = {
+			D3D12_DESCRIPTOR_HEAP_TYPE::D3D12_DESCRIPTOR_HEAP_TYPE_RTV, 
+			1,
+			D3D12_DESCRIPTOR_HEAP_FLAGS::D3D12_DESCRIPTOR_HEAP_FLAG_NONE,
+			0X1
+		};
+		pD3D12Device->CreateDescriptorHeap(&RTVHeapDesc, IID_PPV_ARGS(&pRTVHeap));
+	}
+	ID3D12Resource *pFrameBuffer;
+	pDXGISwapChain->GetBuffer(0, IID_PPV_ARGS(&pFrameBuffer));
+	pD3D12Device->CreateRenderTargetView(pFrameBuffer, NULL, pRTVHeap->GetCPUDescriptorHandleForHeapStart());
+
+
+	ID3D12CommandAllocator *pDirectCommandAllocator;
+	pD3D12Device->CreateCommandAllocator(D3D12_COMMAND_LIST_TYPE::D3D12_COMMAND_LIST_TYPE_DIRECT, IID_PPV_ARGS(&pDirectCommandAllocator));
+	ID3D12GraphicsCommandList *pDirectCommandList;
+	pD3D12Device->CreateCommandList(0X1, D3D12_COMMAND_LIST_TYPE::D3D12_COMMAND_LIST_TYPE_DIRECT, pDirectCommandAllocator, NULL, IID_PPV_ARGS(&pDirectCommandList));
+
+
+	D3D12_RESOURCE_BARRIER CommonToRenderTarget = {
+		D3D12_RESOURCE_BARRIER_TYPE::D3D12_RESOURCE_BARRIER_TYPE_TRANSITION,
+		D3D12_RESOURCE_BARRIER_FLAGS::D3D12_RESOURCE_BARRIER_FLAG_NONE,
+		pFrameBuffer,
+		0,
+		D3D12_RESOURCE_STATES::D3D12_RESOURCE_STATE_COMMON,
+		D3D12_RESOURCE_STATES::D3D12_RESOURCE_STATE_RENDER_TARGET
+	};
+	pDirectCommandList->ResourceBarrier(1, &CommonToRenderTarget);
+	float rgbacolor[4] = { 0.9f, 0.5f, 0.1f, 0.5f };
+	pDirectCommandList->ClearRenderTargetView(pRTVHeap->GetCPUDescriptorHandleForHeapStart(), rgbacolor, 0, NULL);
+
+	D3D12_RESOURCE_BARRIER RenderTargetToCommon = {
+		D3D12_RESOURCE_BARRIER_TYPE::D3D12_RESOURCE_BARRIER_TYPE_TRANSITION,
+		D3D12_RESOURCE_BARRIER_FLAGS::D3D12_RESOURCE_BARRIER_FLAG_NONE,
+		pFrameBuffer,
+		0,
+		D3D12_RESOURCE_STATES::D3D12_RESOURCE_STATE_RENDER_TARGET,
+		D3D12_RESOURCE_STATES::D3D12_RESOURCE_STATE_COMMON
+	};
+	pDirectCommandList->ResourceBarrier(1, &RenderTargetToCommon);
+	pDirectCommandList->Close();
+	pDirectCommandQueue->ExecuteCommandLists(1, reinterpret_cast<ID3D12CommandList **>(&pDirectCommandList));
+
+
+
 	pDXGISwapChain->Present(0, 0);
 
 	return 0U;
