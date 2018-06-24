@@ -1,4 +1,8 @@
-#include "stdafx.h"
+#include <sdkddkver.h>
+#define WIN32_LEAN_AND_MEAN             // 从 Windows 头中排除极少使用的资料
+#include <Windows.h>
+#include <d3d12.h>
+#include <dxgi.h>
 
 DWORD WINAPI RenderThreadMain(LPVOID lpThreadParameter) {
 
@@ -23,7 +27,7 @@ DWORD WINAPI RenderThreadMain(LPVOID lpThreadParameter) {
 	{
 		IDXGIAdapter *pDXGIAdapter;
 		for (UINT i = 0U; SUCCEEDED(pDXGIFactory->EnumAdapters(i, &pDXGIAdapter)); ++i) {
-			if (SUCCEEDED(D3D12CreateDevice(pDXGIAdapter, D3D_FEATURE_LEVEL_12_0, IID_PPV_ARGS(&pD3D12Device)))) {
+			if (SUCCEEDED(D3D12CreateDevice(pDXGIAdapter, D3D_FEATURE_LEVEL_11_0, IID_PPV_ARGS(&pD3D12Device)))) {
 				pDXGIAdapter->Release();
 				break;
 			}
@@ -59,7 +63,7 @@ DWORD WINAPI RenderThreadMain(LPVOID lpThreadParameter) {
 		scdc.BufferCount = 2;
 		scdc.OutputWindow = hWnd;
 		scdc.Windowed = TRUE;
-		scdc.SwapEffect = DXGI_SWAP_EFFECT::DXGI_SWAP_EFFECT_SEQUENTIAL;
+		scdc.SwapEffect = DXGI_SWAP_EFFECT::DXGI_SWAP_EFFECT_FLIP_SEQUENTIAL;
 		scdc.Flags = 0U;
 		pDXGIFactory->CreateSwapChain(pDirectCommandQueue, &scdc, &pDXGISwapChain);
 	}

@@ -1,28 +1,20 @@
-#include "stdafx.h"
+#include <SDKDDKVer.h>
+#define WIN32_LEAN_AND_MEAN             // 从 Windows 头中排除极少使用的资料
+// Windows 头文件: 
+#include <Windows.h>
+#include <process.h>
 
-inline HANDLE __stdcall BeginThread(
-	LPSECURITY_ATTRIBUTES lpThreadAttributes,
-	SIZE_T dwStackSize,
-	LPTHREAD_START_ROUTINE lpStartAddress,
-	LPVOID lpParameter,
-	DWORD dwCreationFlags,
-	LPDWORD lpThread
-) {
-	return reinterpret_cast<HANDLE>(_beginthreadex(static_cast<void *>(lpThreadAttributes),
-		dwStackSize,
-		reinterpret_cast<unsigned(__stdcall *) (void *)>(lpStartAddress),
-		lpParameter,
-		dwCreationFlags,
-		reinterpret_cast<unsigned *>(lpThread)));
+inline HANDLE __stdcall BeginThread(	LPSECURITY_ATTRIBUTES lpThreadAttributes, SIZE_T dwStackSize, LPTHREAD_START_ROUTINE lpStartAddress, LPVOID lpParameter,
+										DWORD dwCreationFlags, LPDWORD lpThread) {
+	return reinterpret_cast<HANDLE>(_beginthreadex(	static_cast<void *>(lpThreadAttributes), dwStackSize, 
+													reinterpret_cast<unsigned(__stdcall *) (void *)>(lpStartAddress), lpParameter, dwCreationFlags,
+													reinterpret_cast<unsigned *>(lpThread)));
 }
 
 LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
 DWORD WINAPI RenderThreadMain(LPVOID);
 
-int APIENTRY wWinMain(HINSTANCE hInstance,
-	HINSTANCE,
-	LPWSTR lpCmdLine,
-	int nCmdShow) {
+int APIENTRY wWinMain(HINSTANCE hInstance, HINSTANCE, LPWSTR lpCmdLine, int nCmdShow) {
 		{
 			WNDCLASSEXW wcex;
 			wcex.cbSize = sizeof(WNDCLASSEX);
@@ -48,10 +40,10 @@ int APIENTRY wWinMain(HINSTANCE hInstance,
 
 			HWND hWnd = CreateWindowExW(0,
 				L"{640CB8AD-56CD-4328-B4D0-2A9DAA951494}",
-				L"<<Direct3D 12 编程>>",
+				L"<<Direct3D 12 programming>>",
 				WS_POPUP | WS_VISIBLE,
-				0,
-				0,
+				GetSystemMetrics(SM_CXSCREEN) / 2 - windowrect.right / 2,
+				GetSystemMetrics(SM_CYSCREEN) / 2 - windowrect.bottom / 2,
 				windowrect.right,
 				windowrect.bottom,
 				NULL,
