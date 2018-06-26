@@ -7,4 +7,10 @@
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="GRS.hlsli" />
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="GRS.hlsl" />
+  </ItemGroup>
 </Project>
