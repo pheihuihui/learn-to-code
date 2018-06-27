@@ -12,5 +12,8 @@
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="GRS.hlsl" />
+    <FxCompile Include="VS.hlsl" />
+    <FxCompile Include="VertexShader.hlsl" />
+    <FxCompile Include="PS.hlsl" />
   </ItemGroup>
 </Project>

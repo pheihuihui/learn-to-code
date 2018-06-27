@@ -82,30 +82,6 @@ DWORD WINAPI RenderThreadMain(LPVOID lpThreadParameter) {
 	pD3D12Device->CreateCommandList(0X1, D3D12_COMMAND_LIST_TYPE::D3D12_COMMAND_LIST_TYPE_DIRECT, pDirectCommandAllocator, NULL, IID_PPV_ARGS(&pDirectCommandList));
 
 
-	D3D12_RESOURCE_BARRIER CommonToRenderTarget = {
-		D3D12_RESOURCE_BARRIER_TYPE::D3D12_RESOURCE_BARRIER_TYPE_TRANSITION,
-		D3D12_RESOURCE_BARRIER_FLAGS::D3D12_RESOURCE_BARRIER_FLAG_NONE,
-		pFrameBuffer,
-		0,
-		D3D12_RESOURCE_STATES::D3D12_RESOURCE_STATE_COMMON,
-		D3D12_RESOURCE_STATES::D3D12_RESOURCE_STATE_RENDER_TARGET
-	};
-	pDirectCommandList->ResourceBarrier(1, &CommonToRenderTarget);
-	float rgbacolor[4] = { 0.9f, 0.5f, 0.1f, 0.5f };
-	pDirectCommandList->ClearRenderTargetView(pRTVHeap->GetCPUDescriptorHandleForHeapStart(), rgbacolor, 0, NULL);
-
-	D3D12_RESOURCE_BARRIER RenderTargetToCommon = {
-		D3D12_RESOURCE_BARRIER_TYPE::D3D12_RESOURCE_BARRIER_TYPE_TRANSITION,
-		D3D12_RESOURCE_BARRIER_FLAGS::D3D12_RESOURCE_BARRIER_FLAG_NONE,
-		pFrameBuffer,
-		0,
-		D3D12_RESOURCE_STATES::D3D12_RESOURCE_STATE_RENDER_TARGET,
-		D3D12_RESOURCE_STATES::D3D12_RESOURCE_STATE_COMMON
-	};
-	pDirectCommandList->ResourceBarrier(1, &RenderTargetToCommon);
-	pDirectCommandList->Close();
-	pDirectCommandQueue->ExecuteCommandLists(1, reinterpret_cast<ID3D12CommandList**>(&pDirectCommandList));
-
 
 	ID3D12RootSignature *pGRS;
 	HANDLE hGRSFile = CreateFileW(L"GRS.cso", GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
@@ -118,7 +94,144 @@ DWORD WINAPI RenderThreadMain(LPVOID lpThreadParameter) {
 	CloseHandle(hGRSSection);
 	CloseHandle(hGRSFile);
 
+	ID3D12PipelineState *pGraphicPipelineState;
+	HANDLE hVSFile = CreateFileW(L"VS.cso", GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
+	LARGE_INTEGER szVSFile;
+	GetFileSizeEx(hVSFile, &szVSFile);
+	HANDLE hVSSection = CreateFileMappingW(hVSFile, NULL, PAGE_READONLY, 0, szVSFile.LowPart, NULL);
+	void *pVSFile = MapViewOfFile(hVSFile, FILE_MAP_READ, 0, 0, szVSFile.LowPart);
+
+	HANDLE hPSFile = CreateFileW(L"PS.cso", GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
+	LARGE_INTEGER szPSFile;
+	GetFileSizeEx(hPSFile, &szPSFile);
+	HANDLE hPSSection = CreateFileMappingW(hPSFile, NULL, PAGE_READONLY, 0, szPSFile.LowPart, NULL);
+	void *pPSFile = MapViewOfFile(hPSFile, FILE_MAP_READ, 0, 0, szPSFile.LowPart);
+
+	D3D12_GRAPHICS_PIPELINE_STATE_DESC psoDesc;
+	psoDesc.pRootSignature = pGRS;
+
+	psoDesc.InputLayout.NumElements = 0;
+	psoDesc.InputLayout.pInputElementDescs = NULL;
+
+	psoDesc.IBStripCutValue = D3D12_INDEX_BUFFER_STRIP_CUT_VALUE::D3D12_INDEX_BUFFER_STRIP_CUT_VALUE_DISABLED;
+	psoDesc.PrimitiveTopologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE::D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE;
+
+	psoDesc.VS.pShaderBytecode = pVSFile;
+	psoDesc.VS.BytecodeLength = szVSFile.LowPart;
+	psoDesc.PS.pShaderBytecode = pPSFile;
+	psoDesc.PS.BytecodeLength = szPSFile.LowPart;
+
+	psoDesc.HS.pShaderBytecode = NULL;
+	psoDesc.DS.pShaderBytecode = NULL;
+	psoDesc.GS.pShaderBytecode = NULL;
+	psoDesc.HS.BytecodeLength = 0;
+	psoDesc.DS.BytecodeLength = 0;
+	psoDesc.GS.BytecodeLength = 0;
+
+	psoDesc.StreamOutput = {  };
+
+	psoDesc.RasterizerState.FillMode = D3D12_FILL_MODE::D3D12_FILL_MODE_SOLID;
+	psoDesc.RasterizerState.CullMode = D3D12_CULL_MODE::D3D12_CULL_MODE_NONE;
+	psoDesc.RasterizerState.FrontCounterClockwise = FALSE;
+	psoDesc.RasterizerState.DepthBias = 0;
+	psoDesc.RasterizerState.DepthBiasClamp = 0.0f;
+	psoDesc.RasterizerState.SlopeScaledDepthBias = 0.0f;
+	psoDesc.RasterizerState.DepthClipEnable = FALSE;
+	psoDesc.RasterizerState.MultisampleEnable = FALSE;
+	psoDesc.RasterizerState.AntialiasedLineEnable = FALSE;
+	psoDesc.RasterizerState.ForcedSampleCount = 0U;
+	psoDesc.RasterizerState.ConservativeRaster = D3D12_CONSERVATIVE_RASTERIZATION_MODE::D3D12_CONSERVATIVE_RASTERIZATION_MODE_OFF;
+
+	psoDesc.NumRenderTargets = 1;
+	psoDesc.RTVFormats[0] = DXGI_FORMAT::DXGI_FORMAT_R8G8B8A8_UNORM;
+	psoDesc.RTVFormats[1] = DXGI_FORMAT::DXGI_FORMAT_UNKNOWN;
+	psoDesc.RTVFormats[2] = DXGI_FORMAT::DXGI_FORMAT_UNKNOWN;
+	psoDesc.RTVFormats[3] = DXGI_FORMAT::DXGI_FORMAT_UNKNOWN;
+	psoDesc.RTVFormats[4] = DXGI_FORMAT::DXGI_FORMAT_UNKNOWN;
+	psoDesc.RTVFormats[5] = DXGI_FORMAT::DXGI_FORMAT_UNKNOWN;
+	psoDesc.RTVFormats[6] = DXGI_FORMAT::DXGI_FORMAT_UNKNOWN;
+	psoDesc.RTVFormats[7] = DXGI_FORMAT::DXGI_FORMAT_UNKNOWN;
+	psoDesc.DSVFormat = DXGI_FORMAT::DXGI_FORMAT_UNKNOWN;
+
+	psoDesc.SampleDesc.Count = 1;
+	psoDesc.SampleDesc.Quality = 0;
+
+	psoDesc.SampleMask = 0XFFFFFFFF;
+
+	psoDesc.DepthStencilState = {};
+	psoDesc.DepthStencilState.DepthEnable = FALSE;
+	psoDesc.DepthStencilState.StencilEnable = FALSE;
+
+	psoDesc.BlendState = D3D12_BLEND_DESC{};
+	psoDesc.BlendState.AlphaToCoverageEnable = FALSE;
+	psoDesc.BlendState.IndependentBlendEnable = FALSE;
+	psoDesc.BlendState.RenderTarget[0].BlendEnable = FALSE;
+	psoDesc.BlendState.RenderTarget[0].LogicOpEnable = FALSE;
+	psoDesc.BlendState.RenderTarget[0].RenderTargetWriteMask = D3D12_COLOR_WRITE_ENABLE::D3D12_COLOR_WRITE_ENABLE_ALL;
+
+	psoDesc.NodeMask = 0X1;
+
+	psoDesc.CachedPSO.pCachedBlob = NULL;
+	psoDesc.CachedPSO.CachedBlobSizeInBytes = 0;
+
+	psoDesc.Flags = D3D12_PIPELINE_STATE_FLAGS::D3D12_PIPELINE_STATE_FLAG_NONE;
+
+	pD3D12Device->CreateGraphicsPipelineState(&psoDesc, IID_PPV_ARGS(&pGraphicPipelineState));
+
+	UnmapViewOfFile(pVSFile);
+	CloseHandle(hVSSection);
+	CloseHandle(hVSFile);
+
+	UnmapViewOfFile(pPSFile);
+	CloseHandle(hPSSection);
+	CloseHandle(hPSFile);
+
+	//ID3D12CommandAllocator *pDirectCommandAllocator;
+	//pD3D12Device->CreateCommandAllocator(D3D12_COMMAND_LIST_TYPE::D3D12_COMMAND_LIST_TYPE_DIRECT, IID_PPV_ARGS(&pDirectCommandAllocator));
+
+	//ID3D12CommandList *pDirectCommandList;
+	//pD3D12Device->CreateCommandList(0X1, D3D12_COMMAND_LIST_TYPE::D3D12_COMMAND_LIST_TYPE_DIRECT, pDirectCommandAllocator, NULL, IID_PPV_ARGS(&pDirectCommandList));
+
+	pDirectCommandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY::D3D_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);
+	D3D12_VIEWPORT vp = {
+		0.0f,
+		0.0f,
+		800.0f,
+		600.0f,
+		0.0f,
+		1.0f
+	};
+	pDirectCommandList->RSSetViewports(1, &vp);
+	D3D12_RECT sr = { 0, 0, 800, 600 };
+	pDirectCommandList->RSSetScissorRects(1, &sr);
+	pDirectCommandList->OMSetRenderTargets(1, &pRTVHeap->GetCPUDescriptorHandleForHeapStart(), FALSE, NULL);
 	pDirectCommandList->SetGraphicsRootSignature(pGRS);
+	pDirectCommandList->SetPipelineState(pGraphicPipelineState);
+
+	D3D12_RESOURCE_BARRIER CommonToRenderTarget = {
+		D3D12_RESOURCE_BARRIER_TYPE::D3D12_RESOURCE_BARRIER_TYPE_TRANSITION,
+		D3D12_RESOURCE_BARRIER_FLAGS::D3D12_RESOURCE_BARRIER_FLAG_NONE,
+		pFrameBuffer,
+		0,
+		D3D12_RESOURCE_STATES::D3D12_RESOURCE_STATE_COMMON,
+		D3D12_RESOURCE_STATES::D3D12_RESOURCE_STATE_RENDER_TARGET
+	};
+	pDirectCommandList->ResourceBarrier(1, &CommonToRenderTarget);
+	pDirectCommandList->DrawInstanced(3, 1, 0, 0);
+	//float rgbacolor[4] = { 0.9f, 0.5f, 0.1f, 0.5f };
+	//pDirectCommandList->ClearRenderTargetView(pRTVHeap->GetCPUDescriptorHandleForHeapStart(), rgbacolor, 0, NULL);
+
+	D3D12_RESOURCE_BARRIER RenderTargetToCommon = {
+		D3D12_RESOURCE_BARRIER_TYPE::D3D12_RESOURCE_BARRIER_TYPE_TRANSITION,
+		D3D12_RESOURCE_BARRIER_FLAGS::D3D12_RESOURCE_BARRIER_FLAG_NONE,
+		pFrameBuffer,
+		0,
+		D3D12_RESOURCE_STATES::D3D12_RESOURCE_STATE_RENDER_TARGET,
+		D3D12_RESOURCE_STATES::D3D12_RESOURCE_STATE_COMMON
+	};
+	pDirectCommandList->ResourceBarrier(1, &RenderTargetToCommon);
+	pDirectCommandList->Close();
+	pDirectCommandQueue->ExecuteCommandLists(1, reinterpret_cast<ID3D12CommandList**>(&pDirectCommandList));
 
 	pDXGISwapChain->Present(0, 0);
 
