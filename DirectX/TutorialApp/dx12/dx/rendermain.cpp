@@ -76,10 +76,10 @@ DWORD WINAPI RenderThreadMain(LPVOID lpThreadParameter) {
 	pD3D12Device->CreateRenderTargetView(pFrameBuffer, NULL, pRTVHeap->GetCPUDescriptorHandleForHeapStart());
 
 
-	ID3D12CommandAllocator *pDirectCommandAllocator;
-	pD3D12Device->CreateCommandAllocator(D3D12_COMMAND_LIST_TYPE::D3D12_COMMAND_LIST_TYPE_DIRECT, IID_PPV_ARGS(&pDirectCommandAllocator));
-	ID3D12GraphicsCommandList *pDirectCommandList;
-	pD3D12Device->CreateCommandList(0X1, D3D12_COMMAND_LIST_TYPE::D3D12_COMMAND_LIST_TYPE_DIRECT, pDirectCommandAllocator, NULL, IID_PPV_ARGS(&pDirectCommandList));
+	//ID3D12CommandAllocator *pDirectCommandAllocator;
+	//pD3D12Device->CreateCommandAllocator(D3D12_COMMAND_LIST_TYPE::D3D12_COMMAND_LIST_TYPE_DIRECT, IID_PPV_ARGS(&pDirectCommandAllocator));
+	//ID3D12GraphicsCommandList *pDirectCommandList;
+	//pD3D12Device->CreateCommandList(0X1, D3D12_COMMAND_LIST_TYPE::D3D12_COMMAND_LIST_TYPE_DIRECT, pDirectCommandAllocator, NULL, IID_PPV_ARGS(&pDirectCommandList));
 
 
 
@@ -88,7 +88,7 @@ DWORD WINAPI RenderThreadMain(LPVOID lpThreadParameter) {
 	LARGE_INTEGER szGRSFile;
 	GetFileSizeEx(hGRSFile, &szGRSFile);
 	HANDLE hGRSSection = CreateFileMappingW(hGRSFile, NULL, PAGE_READONLY, 0, szGRSFile.LowPart, NULL);
-	void *pGRSFile = MapViewOfFile(hGRSFile, FILE_MAP_READ, 0, 0, szGRSFile.LowPart);
+	void *pGRSFile = MapViewOfFile(hGRSSection, FILE_MAP_READ, 0, 0, szGRSFile.LowPart);
 	pD3D12Device->CreateRootSignature(0X1, pGRSFile, szGRSFile.LowPart, IID_PPV_ARGS(&pGRS));
 	UnmapViewOfFile(pGRSFile);
 	CloseHandle(hGRSSection);
@@ -99,13 +99,13 @@ DWORD WINAPI RenderThreadMain(LPVOID lpThreadParameter) {
 	LARGE_INTEGER szVSFile;
 	GetFileSizeEx(hVSFile, &szVSFile);
 	HANDLE hVSSection = CreateFileMappingW(hVSFile, NULL, PAGE_READONLY, 0, szVSFile.LowPart, NULL);
-	void *pVSFile = MapViewOfFile(hVSFile, FILE_MAP_READ, 0, 0, szVSFile.LowPart);
+	void *pVSFile = MapViewOfFile(hVSSection, FILE_MAP_READ, 0, 0, szVSFile.LowPart);
 
 	HANDLE hPSFile = CreateFileW(L"PS.cso", GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
 	LARGE_INTEGER szPSFile;
 	GetFileSizeEx(hPSFile, &szPSFile);
 	HANDLE hPSSection = CreateFileMappingW(hPSFile, NULL, PAGE_READONLY, 0, szPSFile.LowPart, NULL);
-	void *pPSFile = MapViewOfFile(hPSFile, FILE_MAP_READ, 0, 0, szPSFile.LowPart);
+	void *pPSFile = MapViewOfFile(hPSSection, FILE_MAP_READ, 0, 0, szPSFile.LowPart);
 
 	D3D12_GRAPHICS_PIPELINE_STATE_DESC psoDesc;
 	psoDesc.pRootSignature = pGRS;
@@ -186,23 +186,23 @@ DWORD WINAPI RenderThreadMain(LPVOID lpThreadParameter) {
 	CloseHandle(hPSSection);
 	CloseHandle(hPSFile);
 
-	//ID3D12CommandAllocator *pDirectCommandAllocator;
-	//pD3D12Device->CreateCommandAllocator(D3D12_COMMAND_LIST_TYPE::D3D12_COMMAND_LIST_TYPE_DIRECT, IID_PPV_ARGS(&pDirectCommandAllocator));
+	ID3D12CommandAllocator *pDirectCommandAllocator;
+	pD3D12Device->CreateCommandAllocator(D3D12_COMMAND_LIST_TYPE::D3D12_COMMAND_LIST_TYPE_DIRECT, IID_PPV_ARGS(&pDirectCommandAllocator));
 
-	//ID3D12CommandList *pDirectCommandList;
-	//pD3D12Device->CreateCommandList(0X1, D3D12_COMMAND_LIST_TYPE::D3D12_COMMAND_LIST_TYPE_DIRECT, pDirectCommandAllocator, NULL, IID_PPV_ARGS(&pDirectCommandList));
+	ID3D12GraphicsCommandList *pDirectCommandList;
+	pD3D12Device->CreateCommandList(0X1, D3D12_COMMAND_LIST_TYPE::D3D12_COMMAND_LIST_TYPE_DIRECT, pDirectCommandAllocator, NULL, IID_PPV_ARGS(&pDirectCommandList));
 
 	pDirectCommandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY::D3D_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);
 	D3D12_VIEWPORT vp = {
-		0.0f,
-		0.0f,
-		800.0f,
-		600.0f,
-		0.0f,
+		4.0f,
+		2.0f,
+		500.0f,
+		700.0f,
+		3.0f,
 		1.0f
 	};
 	pDirectCommandList->RSSetViewports(1, &vp);
-	D3D12_RECT sr = { 0, 0, 800, 600 };
+	D3D12_RECT sr = { 1, 20, 1200, 3400 };
 	pDirectCommandList->RSSetScissorRects(1, &sr);
 	pDirectCommandList->OMSetRenderTargets(1, &pRTVHeap->GetCPUDescriptorHandleForHeapStart(), FALSE, NULL);
 	pDirectCommandList->SetGraphicsRootSignature(pGRS);
