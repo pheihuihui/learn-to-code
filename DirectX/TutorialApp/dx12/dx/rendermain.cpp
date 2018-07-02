@@ -231,9 +231,19 @@ DWORD WINAPI RenderThreadMain(LPVOID lpThreadParameter) {
 	};
 	pDirectCommandList->ResourceBarrier(1, &RenderTargetToCommon);
 	pDirectCommandList->Close();
+	//pDirectCommandQueue->ExecuteCommandLists(1, reinterpret_cast<ID3D12CommandList**>(&pDirectCommandList));
+
+
+	ID3D12Fence *pTestFence;
+	pD3D12Device->CreateFence(5U, D3D12_FENCE_FLAGS::D3D12_FENCE_FLAG_NONE, IID_PPV_ARGS(&pTestFence));
+
+	pDirectCommandQueue->Wait(pTestFence, 7U);
 	pDirectCommandQueue->ExecuteCommandLists(1, reinterpret_cast<ID3D12CommandList**>(&pDirectCommandList));
 
 	pDXGISwapChain->Present(0, 0);
+
+	MessageBoxW(hWnd, L"Continue", L"Fence Test", MB_OK);
+	pTestFence->Signal(9U);
 
 	return 0U;
 }

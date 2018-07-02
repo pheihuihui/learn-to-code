@@ -11,5 +11,9 @@ MyClass::MyClass(int i) {
 void MyClass::printHellos() {
 	for (int i = 0; i < times; i++) {
 		cout << "hello" << endl;
+		cout << "hello" << endl;
+		cout << "hello" << endl;
+		cout << "hello" << endl;
+		cout << "hello" << endl;
 	}
 }
