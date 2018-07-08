@@ -202,7 +202,7 @@ DWORD WINAPI RenderThreadMain(LPVOID lpThreadParameter) {
 		1.0f
 	};
 	pDirectCommandList->RSSetViewports(1, &vp);
-	D3D12_RECT sr = { 1, 20, 1200, 3400 };
+	D3D12_RECT sr = { 1, 20, 1200, 340 };
 	pDirectCommandList->RSSetScissorRects(1, &sr);
 	pDirectCommandList->OMSetRenderTargets(1, &pRTVHeap->GetCPUDescriptorHandleForHeapStart(), FALSE, NULL);
 	pDirectCommandList->SetGraphicsRootSignature(pGRS);
@@ -231,7 +231,7 @@ DWORD WINAPI RenderThreadMain(LPVOID lpThreadParameter) {
 	};
 	pDirectCommandList->ResourceBarrier(1, &RenderTargetToCommon);
 	pDirectCommandList->Close();
-	//pDirectCommandQueue->ExecuteCommandLists(1, reinterpret_cast<ID3D12CommandList**>(&pDirectCommandList));
+	pDirectCommandQueue->ExecuteCommandLists(1, reinterpret_cast<ID3D12CommandList**>(&pDirectCommandList));
 
 
 	ID3D12Fence *pTestFence;
@@ -243,7 +243,7 @@ DWORD WINAPI RenderThreadMain(LPVOID lpThreadParameter) {
 	pDXGISwapChain->Present(0, 0);
 
 	MessageBoxW(hWnd, L"Continue", L"Fence Test", MB_OK);
-	pTestFence->Signal(9U);
+	pTestFence->Signal(7U);
 
 	return 0U;
 }
