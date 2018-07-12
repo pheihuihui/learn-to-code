@@ -9,7 +9,6 @@ DWORD WINAPI RenderThreadMain(LPVOID lpThreadParameter) {
 	HWND hWnd = static_cast<HWND>(lpThreadParameter);
 
 #if defined(_DEBUG)
-	//debug layer
 	ID3D12Debug *pD3D12Debug;
 	if (SUCCEEDED(D3D12GetDebugInterface(IID_PPV_ARGS(&pD3D12Debug)))) {
 		pD3D12Debug->EnableDebugLayer();
@@ -17,8 +16,7 @@ DWORD WINAPI RenderThreadMain(LPVOID lpThreadParameter) {
 	pD3D12Debug->Release();
 #endif
 
-
-	//create device
+#pragma region create device
 	IDXGIFactory *pDXGIFactory;
 	CreateDXGIFactory(IID_PPV_ARGS(&pDXGIFactory));
 	ID3D12Device *pD3D12Device = NULL;
@@ -30,8 +28,9 @@ DWORD WINAPI RenderThreadMain(LPVOID lpThreadParameter) {
 		}
 		pDXGIAdapter->Release();
 	}
+#pragma endregion
 
-	//create command queue
+#pragma region command queue
 	ID3D12CommandQueue *pDirectCommandQueue;
 	D3D12_COMMAND_QUEUE_DESC cqdc;
 	cqdc.Type = D3D12_COMMAND_LIST_TYPE::D3D12_COMMAND_LIST_TYPE_DIRECT;
@@ -39,9 +38,9 @@ DWORD WINAPI RenderThreadMain(LPVOID lpThreadParameter) {
 	cqdc.Flags = D3D12_COMMAND_QUEUE_FLAGS::D3D12_COMMAND_QUEUE_FLAG_NONE;
 	cqdc.NodeMask = 0X1;
 	pD3D12Device->CreateCommandQueue(&cqdc, IID_PPV_ARGS(&pDirectCommandQueue));
+#pragma endregion
 
-
-	//create swap chain
+#pragma region swap chain
 	IDXGISwapChain *pDXGISwapChain;
 	DXGI_SWAP_CHAIN_DESC scdc;
 	scdc.BufferDesc.Width = 0U;
@@ -61,6 +60,8 @@ DWORD WINAPI RenderThreadMain(LPVOID lpThreadParameter) {
 	scdc.Flags = 0U;
 	pDXGIFactory->CreateSwapChain(pDirectCommandQueue, &scdc, &pDXGISwapChain);
 	pDXGIFactory->Release();
+#pragma endregion
+
 
 
 	ID3D12DescriptorHeap *pRTVHeap;
@@ -76,13 +77,7 @@ DWORD WINAPI RenderThreadMain(LPVOID lpThreadParameter) {
 	pD3D12Device->CreateRenderTargetView(pFrameBuffer, NULL, pRTVHeap->GetCPUDescriptorHandleForHeapStart());
 
 
-	//ID3D12CommandAllocator *pDirectCommandAllocator;
-	//pD3D12Device->CreateCommandAllocator(D3D12_COMMAND_LIST_TYPE::D3D12_COMMAND_LIST_TYPE_DIRECT, IID_PPV_ARGS(&pDirectCommandAllocator));
-	//ID3D12GraphicsCommandList *pDirectCommandList;
-	//pD3D12Device->CreateCommandList(0X1, D3D12_COMMAND_LIST_TYPE::D3D12_COMMAND_LIST_TYPE_DIRECT, pDirectCommandAllocator, NULL, IID_PPV_ARGS(&pDirectCommandList));
-
-
-
+#pragma region root signature
 	ID3D12RootSignature *pGRS;
 	HANDLE hGRSFile = CreateFileW(L"GRS.cso", GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
 	LARGE_INTEGER szGRSFile;
@@ -93,7 +88,9 @@ DWORD WINAPI RenderThreadMain(LPVOID lpThreadParameter) {
 	UnmapViewOfFile(pGRSFile);
 	CloseHandle(hGRSSection);
 	CloseHandle(hGRSFile);
+#pragma endregion
 
+#pragma region pipline state
 	ID3D12PipelineState *pGraphicPipelineState;
 	HANDLE hVSFile = CreateFileW(L"VS.cso", GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
 	LARGE_INTEGER szVSFile;
@@ -115,6 +112,10 @@ DWORD WINAPI RenderThreadMain(LPVOID lpThreadParameter) {
 
 	psoDesc.IBStripCutValue = D3D12_INDEX_BUFFER_STRIP_CUT_VALUE::D3D12_INDEX_BUFFER_STRIP_CUT_VALUE_DISABLED;
 	psoDesc.PrimitiveTopologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE::D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE;
+#pragma endregion
+
+
+
 
 	psoDesc.VS.pShaderBytecode = pVSFile;
 	psoDesc.VS.BytecodeLength = szVSFile.LowPart;
@@ -242,7 +243,7 @@ DWORD WINAPI RenderThreadMain(LPVOID lpThreadParameter) {
 
 	pDXGISwapChain->Present(0, 0);
 
-	MessageBoxW(hWnd, L"Continue", L"Fence Test", MB_OK);
+	//MessageBoxW(hWnd, L"Continue", L"Fence Test", MB_OK);
 	pTestFence->Signal(7U);
 
 	return 0U;
