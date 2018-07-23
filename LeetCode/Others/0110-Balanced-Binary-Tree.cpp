@@ -23,3 +23,5 @@ private:
 			return getHeight(node->left) > getHeight(node->right) ? (getHeight(node->left) + 1) : (getHeight(node->right) + 1);
 	}
 };
+
+//too slow
