@@ -2,17 +2,17 @@ class Solution {
 public:
 	vector<int> getRow(int rowIndex) {
 		vector<int> res;
-		if (rowIndex == 0)
-			return vector<int>{1};
-		else if (rowIndex == 1)
-			return vector<int>{1, 1};
-		else {
-			vector<int> last = getRow(rowIndex - 1);
-			res.push_back(*last.begin());
-			for (auto a = last.begin() + 1; a != last.end(); a++)
-				res.push_back(*a + *(a - 1));
-			res.push_back(*(last.end() - 1));
-		}
+		for (int i = 0; i <= rowIndex; i++)
+			res.push_back(getCombs(rowIndex, i));
 		return res;
+	}
+private:
+	int getCombs(int down, int up) {
+		if (up == 0)
+			return 1;
+		else if (up == 1)
+			return down;
+		else
+			return (int)((double)getCombs(down, up - 1) / (double)up * (double)(down - up + 1) + 0.01f);
 	}
 };

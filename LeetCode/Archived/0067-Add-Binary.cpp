@@ -1,36 +1,43 @@
-#include "ctype.h"
-#include <iostream>
-#include <string>
-#include <regex>
-#include <vector>
-#include <map>
-
-using namespace std;
-
 class Solution {
 public:
 	string addBinary(string a, string b) {
-		vector<int> tmp((a.size() > b.size() ? a.size() : b.size()) + 1, 0);
-		for (auto t = a.rbegin(); t != a.rend(); t++) {
-			int index = t - a.rbegin();
-			tmp[index] += (*t - 48);
+		string res = "";
+		bool p = false;
+		int len = a.size() > b.size() ? a.size() : b.size();
+		int index = 0;
+		while (index <= len) {
+			char aa = index >= a.size() ? '0' : *(a.rbegin() + index);
+			char bb = index >= b.size() ? '0' : *(b.rbegin() + index);
+			string tmp = getChar(aa, bb, p);
+			res.insert(res.begin(), tmp[1]);
+			p = tmp[0] - '0';
+			index++;
 		}
-		for (auto s = b.rbegin(); s != b.rend(); s++) {
-			int index = s - b.rbegin();
-			tmp[index] += (*s - 48);
+		if (res != "0" && res[0] == '0')
+			res.erase(res.begin());
+		return res;
+	}
+private:
+	string getChar(char a, char b, bool c) {
+		if (a == '0' && b == '0') {
+			if (c)
+				return "01";
+			else
+				return "00";
 		}
-		for (auto s = tmp.begin(); s != tmp.end() - 1; s++) {
-			if (*s > 1) {
-				*s -= 2;
-				*(s + 1) += 1;
+		else {
+			if ((a == '0' && b == '1') || (a == '1' && b == '0')) {
+				if (c)
+					return "10";
+				else
+					return "01";
+			}
+			else {
+				if (c)
+					return "11";
+				else
+					return "10";
 			}
 		}
-		if (*(tmp.end() - 1) == 0)
-			tmp.erase(tmp.end() - 1);
-		string res = "";
-		for (auto f = tmp.rbegin(); f != tmp.rend(); f++) {
-			res.push_back(*f + 48);
-		}
-		return res;
 	}
 };

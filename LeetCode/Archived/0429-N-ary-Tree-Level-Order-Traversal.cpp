@@ -1,25 +1,35 @@
 class Solution {
 public:
 	vector<vector<int>> levelOrder(Node* root) {
-		levelOrder(root, 0);
 		vector<vector<int>> res;
-		for (auto a = xmap.begin(); a != xmap.end(); a++)
-			res.push_back(a->second);
+		vector<Node*> tmp{ root };
+		while (!isAllNull(tmp)) {
+			vector<int> layer;
+			for (auto a = tmp.begin(); a != tmp.end(); a++)
+				if (*a != nullptr)
+					layer.push_back((*a)->val);
+			res.push_back(layer);
+			tmp = getNext(tmp);
+		}
 		return res;
 	}
 private:
-	map<int, vector<int>> xmap;
-	void levelOrder(Node* node, int index) {
-		if (node == NULL)
-			return;
-		else {
-			if (xmap.find(index) != xmap.end()) {
-				xmap[index].push_back(node->val);
+	vector<Node*> getNext(vector<Node*>& nodes) {
+		vector<Node*> res;
+		for (auto a = nodes.begin(); a != nodes.end(); a++) {
+			if (*a != nullptr) {
+				for (auto b = (*a)->children.begin(); b != (*a)->children.end(); b++)
+					res.push_back(*b);
 			}
-			else
-				xmap.insert(make_pair(index, vector<int>{node->val}));
-			for (auto a = node->children.begin(); a != node->children.end(); a++)
-				levelOrder(*a, index + 1);
 		}
+		return res;
+	}
+	bool isAllNull(vector<Node*>& nodes) {
+		if (nodes.size() == 0)
+			return true;
+		for (auto a = nodes.begin(); a != nodes.end(); a++)
+			if (*a != nullptr)
+				return false;
+		return true;
 	}
 };
