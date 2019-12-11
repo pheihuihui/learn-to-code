@@ -9,8 +9,10 @@
 import SwiftUI
 
 struct SecondView: View {
-    @State private var defaults = UserDefaults.standard
+    private var defaults = UserDefaults.standard
     @State private var resultString = ""
+    @State private var switchOn = false
+    
     var body: some View {
         VStack{
             Button(action: {
@@ -23,6 +25,16 @@ struct SecondView: View {
                 Text("Settings")
             }
             
+            Toggle(isOn: $switchOn) {
+                Text("Warp Drive: ")
+            }.padding(.horizontal, 20)
+            
+            HStack{
+                Text("Toggle State: ")
+                Spacer()
+                Text("\(switchOn ? "On" : "Off")")
+            }.padding(.horizontal, 20)
+            
             Button(action: {
                 self.resultString = self.defaults.bool(forKey: warpDriveKey) ? "Enabled" : "Disabled"
             }){
@@ -30,6 +42,8 @@ struct SecondView: View {
             }
             
             Text("\(resultString == "" ? "Empty" : resultString)")
+        }.onAppear {
+            self.switchOn = self.defaults.bool(forKey: warpDriveKey)
         }
     }
 }

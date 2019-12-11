@@ -18,7 +18,7 @@ struct FirstView: View {
                 Text("Favorite Tea: ")
                 Spacer()
                 Text("\(defaults.string(forKey: favoriteTeaKey) ?? "None")")
-            }.padding(.horizontal, 20)
+                }.padding(.horizontal, 20)
             HStack{
                 Text("Warp Drive: ")
                 Spacer()
