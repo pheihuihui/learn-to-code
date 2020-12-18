@@ -1,35 +1,3 @@
-// function minMutation(start: string, end: string, bank: string[]): number {
-//     let stbank = new Set(bank)
-//     if (!stbank.has(end)) return -1
-//     let arr = [] as { gene: string, steps: number }[]
-//     arr.push({ gene: start, steps: 0 })
-//     while (arr.length != 0) {
-//         let tmp = arr.shift()
-//         let cur = tmp.gene
-//         let n = tmp.steps
-//         if (cur == end) return n
-//         for (const iterator of stbank) {
-//             if (diff(iterator, cur) == 1) {
-//                 arr.push({ gene: iterator, steps: n + 1 })
-//                 stbank.delete(iterator)
-//             }
-//         }
-//     }
-//     return -1
-// }
-
-function diff(str1: string, str2: string): number {
-    if (str1.length != str2.length) return -1
-    let ret = str1.split('').reduce((pre, cur, ind) => {
-        let res = pre
-        if (cur != str2[ind]) {
-            res += 1
-        }
-        return res
-    }, 0)
-    return ret
-}
-
 class PriorityQueue<T> {
     static readonly _top = 0
     static readonly _parent = (i: number) => ((i + 1) >>> 1) - 1
@@ -103,46 +71,21 @@ class PriorityQueue<T> {
     }
 }
 
-function diff1(str1: string, str2: string) {
-    if (str1.length != str2.length) return false
-    let len = str1.length
-    let tmp = 0
-    for (let u = 0; u < len; u++) {
-        if (str1[u] != str2[u]) {
-            tmp += 1
-            if (tmp > 1) return false
-        }
-    }
-    if (tmp == 1) return true
-    return false
+type TTest = {
+    a: number,
+    b: number
 }
 
-type TState = {
-    str: string,
-    depth: number
+let queue = new PriorityQueue<TTest>((a, b) => a.a + a.b > b.a + b.b)
+
+queue.push({ a: 1, b: 2 })
+queue.push({ a: 7, b: 9 })
+queue.push({ a: 7, b: 6 })
+queue.push({ a: 5, b: 10 })
+queue.push({ a: 5, b: 2 })
+
+while (!queue.isEmpty()) {
+    console.log(queue.pop())
 }
 
-function minMutation(start: string, end: string, bank: string[]): number {
-    let queue = new PriorityQueue<TState>((a, b) => {
-        let d1 = diff(a.str, end)
-        let d2 = diff(b.str, end)
-        return d1 < d2
-    })
-    let walked = [] as TState[]
-    queue.push({ str: start, depth: 0 })
-    while (!queue.isEmpty()) {
-        console.log(queue)
-        let p = queue.pop()
-        if (p.str == end) return p.depth
-        walked.push(p)
-        for (const u of bank) {
-            if (diff1(u, p.str)) {
-                let st: TState = { str: u, depth: p.depth + 1 }
-                if (walked.findIndex(x => x.str == u) == -1) {
-                    queue.push(st)
-                }
-            }
-        }
-    }
-    return -1
-}
+export { }
