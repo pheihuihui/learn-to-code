@@ -1,0 +1,17 @@
+{
+  "name": "uncategorized-algorithm-demos",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "node ./build.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "esbuild": "^0.14.48",
+    "showdown": "^2.1.0",
+    "typescript": "^4.7.4"
+  }
+}
